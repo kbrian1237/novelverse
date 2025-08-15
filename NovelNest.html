@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NovelNest | The Midnight Heir</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Base Styles */
+       
+/* Theme Variables */
+:root {
+    /* Default (Midnight) Theme */
+    --primary: #8e6c88;
+    --secondary: #5d4b66;
+    --accent: #c8a2c8;
+    --text: #f0e6ef;
+    --dark: #2a1b2e;
+    --light: #f9f4f9;
+    --gold: #d4af37;
+    --bg: var(--dark);
+    --header-bg: linear-gradient(to bottom, rgba(42, 27, 46, 0.9), rgba(42, 27, 46, 0.5));
+    --footer-bg: linear-gradient(to top, rgba(42, 27, 46, 0.9), rgba(42, 27, 46, 0.5));
+}
+
+/* Daylight Theme */
+.light-theme {
+    --primary: #a78ba8;
+    --secondary: #d9c7d9;
+    --accent: #8e6c88;
+    --text: #2a1b2e;
+    --dark: #2a1b2e;
+    --light: #f9f4f9;
+    --gold: #b8860b;
+    --bg: var(--light);
+    --header-bg: linear-gradient(to bottom, rgba(249, 244, 249, 0.9), rgba(249, 244, 249, 0.7));
+    --footer-bg: linear-gradient(to top, rgba(249, 244, 249, 0.9), rgba(249, 244, 249, 0.7));
+}
+
+/* Sepia Theme */
+.sepia-theme {
+    --primary: #c2a477;
+    --secondary: #e6d5b8;
+    --accent: #a68a64;
+    --text: #3e3524;
+    --dark: #3e3524;
+    --light: #f4ecd8;
+    --gold: #8b6914;
+    --bg: #f4ecd8;
+    --header-bg: linear-gradient(to bottom, rgba(244, 236, 216, 0.9), rgba(244, 236, 216, 0.7));
+    --footer-bg: linear-gradient(to top, rgba(244, 236, 216, 0.9), rgba(244, 236, 216, 0.7));
+}
+
+/* Forest Theme */
+.forest-theme {
+    --primary: #6b8e23;
+    --secondary: #556b2f;
+    --accent: #8fbc8f;
+    --text: #f0fff0;
+    --dark: #2f4f4f;
+    --light: #f5fffa;
+    --gold: #daa520;
+    --bg: #2f4f4f;
+    --header-bg: linear-gradient(to bottom, rgba(47, 79, 79, 0.9), rgba(47, 79, 79, 0.7));
+    --footer-bg: linear-gradient(to top, rgba(47, 79, 79, 0.9), rgba(47, 79, 79, 0.7));
+}
+
+/* Theme dropdown */
+.theme-dropdown {
+    position: fixed;
+    bottom: 5.5rem;
+    left: 2rem;
+    background-color: var(--secondary);
+    border-radius: 10px;
+    padding: 1rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--accent);
+    z-index: 100;
+    display: none;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+    width: 220px;
+}
+
+.theme-dropdown.active {
+    display: grid;
+}
+
+.theme-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 5px;
+    transition: all 0.3s;
+}
+
+.theme-option:hover {
+    background-color: var(--primary);
+}
+
+.theme-preview {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid var(--accent);
+}
+
+.dark-theme-preview {
+    background: linear-gradient(135deg, #2a1b2e 50%, #5d4b66 50%);
+}
+
+.light-theme-preview {
+    background: linear-gradient(135deg, #f9f4f9 50%, #d9c7d9 50%);
+}
+
+.sepia-theme-preview {
+    background: linear-gradient(135deg, #f4ecd8 50%, #e6d5b8 50%);
+}
+
+.forest-theme-preview {
+    background: linear-gradient(135deg, #2f4f4f 50%, #556b2f 50%);
+}
+
+.theme-option span {
+    font-size: 0.8rem;
+    color: var(--text);
+}
+
+/* Update body styles to use CSS variables */
+body {
+    background-color: var(--bg);
+    color: var(--text);
+}
+
+header, footer {
+    background: var(--header-bg);
+}
+
+/* For mobile */
+@media (max-width: 768px) {
+    .theme-dropdown {
+        bottom: 4.5rem;
+        left: 1rem;
+        width: 180px;
+    }
+}
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cormorant Garamond', serif;
+        }
+
+        body {
+            background-color: var(--dark);
+            color: var(--text);
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        /* Animated Background */
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: rgba(200, 162, 200, 0.5);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-1000px) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 5%;
+            background: linear-gradient(to bottom, rgba(42, 27, 46, 0.9), rgba(42, 27, 46, 0.5));
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(5px);
+            border-bottom: 1px solid var(--accent);
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--gold);
+            text-decoration: none;
+            font-family: 'Playfair Display', serif;
+            letter-spacing: 2px;
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin-left: 2rem;
+        }
+
+        nav ul li a {
+            color: var(--text);
+            text-decoration: none;
+            font-size: 1.1rem;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        nav ul li a:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 1px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--gold);
+            transition: width 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: var(--gold);
+        }
+
+        nav ul li a:hover:after {
+            width: 100%;
+        }
+
+        .menu-toggle {
+            display: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+
+        /* Main Content */
+        main {
+            padding: 8rem 5% 4rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .novel-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 3rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .novel-cover {
+            width: 250px;
+            height: 375px;
+            border-radius: 5px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            margin-bottom: 2rem;
+            border: 2px solid var(--gold);
+            transition: transform 0.5s;
+        }
+
+        .novel-cover:hover {
+            transform: scale(1.05);
+        }
+
+        .novel-title {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            color: var(--gold);
+            font-family: 'Playfair Display', serif;
+            letter-spacing: 1px;
+        }
+
+        .novel-author {
+            font-size: 1.2rem;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            font-style: italic;
+        }
+
+        .novel-meta {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .meta-item i {
+            color: var(--gold);
+        }
+
+        .novel-actions {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 30px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background-color: var(--gold);
+            color: var(--dark);
+            font-weight: 600;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--gold);
+            border: 1px solid var(--gold);
+        }
+
+        .btn-secondary:hover {
+            background-color: rgba(212, 175, 55, 0.1);
+            transform: translateY(-3px);
+        }
+
+        /* Chapter Navigation */
+        .chapter-nav {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            padding: 1rem 0;
+            border-top: 1px solid rgba(200, 162, 200, 0.2);
+            border-bottom: 1px solid rgba(200, 162, 200, 0.2);
+        }
+
+        .chapter-nav a {
+            color: var(--gold);
+            text-decoration: none;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: color 0.3s;
+        }
+
+        .chapter-nav a:hover {
+            color: var(--accent);
+        }
+
+        /* Chapter Content */
+        .chapter-content {
+            line-height: 1.8;
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .chapter-content p {
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        .chapter-title {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: var(--gold);
+            font-family: 'Playfair Display', serif;
+            text-align: center;
+            position: relative;
+        }
+
+        .chapter-title:after {
+            content: '';
+            position: absolute;
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(to right, transparent, var(--gold), transparent);
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* Reading Progress */
+        .reading-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background-color: transparent;
+            z-index: 1000;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(to right, var(--gold), var(--accent));
+            width: 0%;
+            transition: width 0.1s;
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--secondary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            z-index: 100;
+            border: 1px solid var(--accent);
+            transition: all 0.3s;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        .theme-toggle i {
+            font-size: 1.2rem;
+            color: var(--gold);
+        }
+
+        /* Reading Options */
+        .reading-options {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            background-color: var(--secondary);
+            border-radius: 30px;
+            padding: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            z-index: 100;
+            border: 1px solid var(--accent);
+        }
+
+        .reading-option {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background-color: transparent;
+            border: none;
+            color: var(--text);
+        }
+
+        .reading-option:hover {
+            background-color: var(--primary);
+            transform: scale(1.1);
+        }
+
+        .reading-option.active {
+            background-color: var(--gold);
+            color: var(--dark);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem 5%;
+            margin-top: 3rem;
+            background: linear-gradient(to top, rgba(42, 27, 46, 0.9), rgba(42, 27, 46, 0.5));
+            border-top: 1px solid var(--accent);
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-links a {
+            color: var(--text);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--gold);
+        }
+
+        .copyright {
+            font-size: 0.9rem;
+            color: var(--accent);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header {
+                padding: 1rem 5%;
+            }
+
+            .logo {
+                font-size: 1.5rem;
+            }
+
+            nav {
+                position: fixed;
+                top: 70px;
+                left: -100%;
+                width: 80%;
+                height: calc(100vh - 70px);
+                background-color: var(--secondary);
+                transition: left 0.3s;
+                z-index: 99;
+                padding: 2rem;
+                box-shadow: 5px 0 15px rgba(0, 0, 0, 0.2);
+            }
+
+            nav.active {
+                left: 0;
+            }
+
+            nav ul {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+
+            nav ul li {
+                margin-left: 0;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            main {
+                padding: 6rem 5% 2rem;
+            }
+
+            .novel-title {
+                font-size: 2rem;
+            }
+
+            .novel-cover {
+                width: 180px;
+                height: 270px;
+            }
+
+            .novel-meta {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .chapter-content {
+                font-size: 1rem;
+            }
+
+            .chapter-title {
+                font-size: 1.5rem;
+            }
+
+            .reading-options {
+                bottom: 1rem;
+                left: 1rem;
+                flex-direction: row;
+            }
+
+            .theme-toggle {
+                bottom: 1rem;
+                right: 1rem;
+                width: 40px;
+                height: 40px;
+            }
+        }
+
+        /* Light Theme */
+        body.light-theme {
+            background-color: var(--light);
+            color: var(--dark);
+        }
+
+        body.light-theme header,
+        body.light-theme footer {
+            background: linear-gradient(to bottom, rgba(249, 244, 249, 0.9), rgba(249, 244, 249, 0.7));
+        }
+
+        body.light-theme nav ul li a,
+        body.light-theme .footer-links a {
+            color: var(--dark);
+        }
+
+        body.light-theme .chapter-content {
+            color: #333;
+        }
+
+        /* Bookmark Animation */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .bookmark-added {
+            animation: pulse 0.5s;
+            color: var(--gold) !important;
+        }
+
+        /* Page Turn Effect */
+        .page-turn {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--dark);
+            z-index: 10000;
+            transform-origin: right;
+            transform: scaleX(0);
+            transition: transform 0.6s ease-in-out;
+        }
+
+        .page-turn.active {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+    
+    /* Add this to your CSS */
+.language-switcher {
+    position: relative;
+    margin-left: 2rem;
+}
+
+.language-btn {
+    background: transparent;
+    border: 1px solid var(--accent);
+    color: var(--text);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s;
+}
+
+.language-btn:hover {
+    background: rgba(200, 162, 200, 0.1);
+    border-color: var(--gold);
+}
+
+.language-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: var(--secondary);
+    border-radius: 5px;
+    padding: 0.5rem 0;
+    min-width: 150px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--accent);
+    z-index: 101;
+    display: none;
+}
+
+.language-dropdown a {
+    display: block;
+    padding: 0.5rem 1rem;
+    color: var(--text);
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+.language-dropdown a:hover {
+    background-color: var(--primary);
+    color: var(--gold);
+}
+
+.language-dropdown.active {
+    display: block;
+}
+
+/* For mobile */
+@media (max-width: 768px) {
+    .language-switcher {
+        margin-left: 0;
+        margin-top: 1.5rem;
+    }
+    
+    .language-dropdown {
+        right: auto;
+        left: 0;
+    }
+}
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="background" id="background"></div>
+
+    <!-- Reading Progress -->
+    <div class="reading-progress">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Page Turn Effect -->
+    <div class="page-turn" id="pageTurn"></div>
+
+    <!-- Header -->
+    <header>
+        <a href="#" class="logo">Novel<span>Nest</span></a>
+        <nav id="navMenu">
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Library</a></li>
+                <li><a href="#">Genres</a></li>
+                <li><a href="#">Authors</a></li>
+                <li><a href="#">My Shelf</a></li>
+            </ul>
+        </nav>
+        <!-- Add this to the header section, right after the navigation menu -->
+<div class="language-switcher">
+    <button class="language-btn" id="languageBtn">
+        <i class="fas fa-globe"></i>
+        <span>EN</span>
+    </button>
+    <div class="language-dropdown" id="languageDropdown">
+        <a href="#" data-lang="en">English</a>
+        <a href="#" data-lang="es">Español</a>
+        <a href="#" data-lang="fr">Français</a>
+        <a href="#" data-lang="de">Deutsch</a>
+        <a href="#" data-lang="ja">日本語</a>
+    </div>
+</div>
+        <div class="menu-toggle" id="menuToggle">
+            <i class="fas fa-bars"></i>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="novel-header">
+            <img src="https://via.placeholder.com/250x375/5d4b66/f0e6ef?text=The+Midnight+Heir" alt="The Midnight Heir" class="novel-cover">
+            <h1 class="novel-title">The Midnight Heir</h1>
+            <p class="novel-author">By Evelyn Blackthorne</p>
+            <div class="novel-meta">
+                <div class="meta-item">
+                    <i class="fas fa-book-open"></i>
+                    <span>Chapter 3 of 24</span>
+                </div>
+                <div class="meta-item">
+                    <i class="fas fa-clock"></i>
+                    <span>15 min read</span>
+                </div>
+                <div class="meta-item">
+                    <i class="fas fa-star"></i>
+                    <span>4.8 (1.2k)</span>
+                </div>
+            </div>
+            <div class="novel-actions">
+                <button class="btn btn-primary" id="readAloudBtn">
+                    <i class="fas fa-volume-up"></i> Read Aloud
+                </button>
+                <button class="btn btn-secondary" id="bookmarkBtn">
+                    <i class="far fa-bookmark"></i> Bookmark
+                </button>
+            </div>
+        </div>
+
+        <div class="chapter-nav">
+            <a href="#" id="prevChapter"><i class="fas fa-chevron-left"></i> Previous Chapter</a>
+            <a href="#" id="nextChapter">Next Chapter <i class="fas fa-chevron-right"></i></a>
+        </div>
+
+        <div class="chapter-content">
+            <h2 class="chapter-title">Chapter 3: The Whispering Gallery</h2>
+            
+            <p>The gas lamps flickered as Alistair stepped into the Whispering Gallery, their dim glow casting elongated shadows that seemed to reach for him like skeletal fingers. The air was thick with the scent of aged paper and something more elusive—the faint metallic tang of secrets.</p>
+            
+            <p>He adjusted his cravat, the silk cool against his suddenly clammy skin. The invitation had arrived at midnight, sealed with wax the color of dried blood. No signature, just three words: <em>"Come alone. Remember."</em></p>
+            
+            <p>The gallery stretched before him, a seemingly endless corridor lined with portraits whose eyes followed his every move. Between them stood glass cases displaying artifacts that defied explanation—a compass that pointed not north but toward the viewer's greatest regret, a pocket watch whose hands moved backward, a locket that emitted a faint humming when held.</p>
+            
+            <p>Alistair's fingers brushed against the revolver concealed beneath his coat. The weight of it was comforting, though he knew better than most that some dangers couldn't be shot.</p>
+            
+            <p>"You're late." The voice came from everywhere and nowhere, echoing off the vaulted ceiling. Alistair spun, but the gallery was empty save for his own reflection in a gilded mirror at the far end.</p>
+            
+            <p>Then the reflection winked.</p>
+            
+            <p>Alistair's breath caught as the mirror image stepped forward—through the glass—and into the gallery. The man who emerged was his mirror twin in every detail, save for the eyes. Where Alistair's were the gray of a London fog, this man's burned with golden fire.</p>
+            
+            <p>"Hello, brother," the doppelgänger said, lips curling into a smile that didn't reach those unsettling eyes. "Did you really think you could outrun your inheritance?"</p>
+            
+            <p>From his pocket, the stranger produced a small velvet box. When he opened it, the object inside pulsed with a light that made the shadows in the gallery recoil. Alistair felt his pulse quicken, though he couldn't say whether from fear or recognition.</p>
+            
+            <p>"The Midnight Key," he whispered.</p>
+            
+            <p>The other Alistair's smile widened. "The first of twelve. And you're going to help me find the rest."</p>
+            
+            <p>Outside, thunder rumbled—or perhaps it was something else entirely. The gallery's walls seemed to breathe in time with the pulsing key, and Alistair realized with dawning horror that the portraits lining the walls weren't of strangers at all.</p>
+            
+            <p>Every face was his own.</p>
+            
+            <p>At that moment, the gas lamps extinguished all at once, plunging the gallery into darkness. The last thing Alistair saw before the light vanished was his double reaching for him—and the terrible certainty that those burning golden eyes were his own.</p>
+        </div>
+
+        <div class="chapter-nav">
+            <a href="#" id="prevChapterBottom"><i class="fas fa-chevron-left"></i> Previous Chapter</a>
+            <a href="#" id="nextChapterBottom">Next Chapter <i class="fas fa-chevron-right"></i></a>
+        </div>
+    </main>
+
+    <!-- Reading Options -->
+    <div class="reading-options">
+        <button class="reading-option" id="fontIncrease" title="Increase Font Size">
+            <i class="fas fa-text-height"></i>
+        </button>
+        <button class="reading-option" id="fontDecrease" title="Decrease Font Size">
+            <i class="fas fa-text-width"></i>
+        </button>
+        <button class="reading-option active" id="themeToggle" title="Toggle Theme">
+            <i class="fas fa-moon"></i>
+        </button>
+        <button class="reading-option" id="fullscreenBtn" title="Fullscreen">
+            <i class="fas fa-expand"></i>
+        </button>
+    </div>
+
+    <!-- Theme Toggle -->
+    <!-- Replace the existing theme toggle with this -->
+<div class="reading-options">
+    <button class="reading-option" id="fontIncrease" title="Increase Font Size">
+        <i class="fas fa-text-height"></i>
+    </button>
+    <button class="reading-option" id="fontDecrease" title="Decrease Font Size">
+        <i class="fas fa-text-width"></i>
+    </button>
+    <button class="reading-option" id="themeToggle" title="Change Theme">
+        <i class="fas fa-palette"></i>
+    </button>
+    <button class="reading-option" id="fullscreenBtn" title="Fullscreen">
+        <i class="fas fa-expand"></i>
+    </button>
+</div>
+
+<!-- Theme selection dropdown -->
+<div class="theme-dropdown" id="themeDropdown">
+    <div class="theme-option" data-theme="dark">
+        <div class="theme-preview dark-theme-preview"></div>
+        <span>Midnight</span>
+    </div>
+    <div class="theme-option" data-theme="light">
+        <div class="theme-preview light-theme-preview"></div>
+        <span>Daylight</span>
+    </div>
+    <div class="theme-option" data-theme="sepia">
+        <div class="theme-preview sepia-theme-preview"></div>
+        <span>Sepia</span>
+    </div>
+    <div class="theme-option" data-theme="forest">
+        <div class="theme-preview forest-theme-preview"></div>
+        <span>Forest</span>
+    </div>
+</div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-links">
+            <a href="#">About</a>
+            <a href="#">Contact</a>
+            <a href="#">Privacy</a>
+            <a href="#">Terms</a>
+            <a href="#">FAQ</a>
+        </div>
+        <p class="copyright">© 2023 NovelNest. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Create animated background particles
+            const background = document.getElementById('background');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+                particle.style.width = `${Math.random() * 3 + 1}px`;
+                particle.style.height = particle.style.width;
+                particle.style.animationDuration = `${Math.random() * 20 + 10}s`;
+                particle.style.animationDelay = `${Math.random() * 5}s`;
+                background.appendChild(particle);
+            }
+
+            // Mobile menu toggle
+            const menuToggle = document.getElementById('menuToggle');
+            const navMenu = document.getElementById('navMenu');
+            
+            menuToggle.addEventListener('click', function() {
+                navMenu.classList.toggle('active');
+                menuToggle.innerHTML = navMenu.classList.contains('active') ? 
+                    '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+            });
+
+            // Reading progress bar
+            const progressBar = document.getElementById('progressBar');
+            window.addEventListener('scroll', function() {
+                const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+                const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                const scrollProgress = (scrollTop / scrollHeight) * 100;
+                progressBar.style.width = scrollProgress + '%';
+            });
+
+                // Replace the existing theme toggle JavaScript with this
+// Theme switcher functionality
+const themeToggle = document.getElementById('themeToggle');
+const themeDropdown = document.getElementById('themeDropdown');
+
+themeToggle.addEventListener('click', function(e) {
+    e.stopPropagation();
+    themeDropdown.classList.toggle('active');
+});
+
+document.addEventListener('click', function() {
+    themeDropdown.classList.remove('active');
+});
+
+// Theme selection handler
+const themeOptions = document.querySelectorAll('.theme-option');
+themeOptions.forEach(option => {
+    option.addEventListener('click', function() {
+        const theme = this.getAttribute('data-theme');
+        applyTheme(theme);
+        themeDropdown.classList.remove('active');
+    });
+});
+
+function applyTheme(theme) {
+    // Remove all theme classes first
+    document.body.classList.remove('light-theme', 'sepia-theme', 'forest-theme');
+    
+    // Add the selected theme class
+    if (theme !== 'dark') {
+        document.body.classList.add(`${theme}-theme`);
+    }
+    
+    // Save theme preference
+    localStorage.setItem('theme', theme);
+    
+    // Show notification
+    const themeNames = {
+        dark: 'Midnight',
+        light: 'Daylight',
+        sepia: 'Sepia',
+        forest: 'Forest'
+    };
+    
+    const notification = document.createElement('div');
+    notification.textContent = `Theme changed to ${themeNames[theme]}`;
+    notification.style.position = 'fixed';
+    notification.style.bottom = '100px';
+    notification.style.right = '20px';
+    notification.style.backgroundColor = 'var(--secondary)';
+    notification.style.color = 'var(--text)';
+    notification.style.padding = '10px 20px';
+    notification.style.borderRadius = '5px';
+    notification.style.boxShadow = '0 3px 10px rgba(0,0,0,0.2)';
+    notification.style.zIndex = '1000';
+    notification.style.transition = 'opacity 0.5s';
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.style.opacity = '0';
+        setTimeout(() => {
+            notification.remove();
+        }, 500);
+    }, 2000);
+}
+
+// Check for saved theme preference
+if (localStorage.getItem('theme')) {
+    const theme = localStorage.getItem('theme');
+    applyTheme(theme);
+}
+                
+            // Font size adjustment
+            const chapterContent = document.querySelector('.chapter-content');
+            const fontIncrease = document.getElementById('fontIncrease');
+            const fontDecrease = document.getElementById('fontDecrease');
+            let fontSize = 1.2; // rem
+            
+            fontIncrease.addEventListener('click', function() {
+                if (fontSize < 1.8) {
+                    fontSize += 0.1;
+                    chapterContent.style.fontSize = `${fontSize}rem`;
+                    localStorage.setItem('fontSize', fontSize);
+                }
+            });
+            
+            fontDecrease.addEventListener('click', function() {
+                if (fontSize > 0.8) {
+                    fontSize -= 0.1;
+                    chapterContent.style.fontSize = `${fontSize}rem`;
+                    localStorage.setItem('fontSize', fontSize);
+                }
+            });
+            
+            // Check for saved font size
+            if (localStorage.getItem('fontSize')) {
+                fontSize = parseFloat(localStorage.getItem('fontSize'));
+                chapterContent.style.fontSize = `${fontSize}rem`;
+            }
+
+            // Bookmark button
+            const bookmarkBtn = document.getElementById('bookmarkBtn');
+            const bookmarkIcon = bookmarkBtn.querySelector('i');
+            
+            bookmarkBtn.addEventListener('click', function() {
+                bookmarkIcon.classList.toggle('far');
+                bookmarkIcon.classList.toggle('fas');
+                bookmarkIcon.classList.add('bookmark-added');
+                
+                setTimeout(() => {
+                    bookmarkIcon.classList.remove('bookmark-added');
+                }, 500);
+                
+                // Save bookmark status
+                const isBookmarked = bookmarkIcon.classList.contains('fas');
+                localStorage.setItem('bookmarked', isBookmarked);
+                
+                // Show notification
+                const notification = document.createElement('div');
+                notification.textContent = isBookmarked ? 'Chapter bookmarked!' : 'Bookmark removed';
+                notification.style.position = 'fixed';
+                notification.style.bottom = '100px';
+                notification.style.right = '20px';
+                notification.style.backgroundColor = 'var(--secondary)';
+                notification.style.color = 'var(--text)';
+                notification.style.padding = '10px 20px';
+                notification.style.borderRadius = '5px';
+                notification.style.boxShadow = '0 3px 10px rgba(0,0,0,0.2)';
+                notification.style.zIndex = '1000';
+                notification.style.transition = 'opacity 0.5s';
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.style.opacity = '0';
+                    setTimeout(() => {
+                        notification.remove();
+                    }, 500);
+                }, 2000);
+            });
+            
+            // Check for existing bookmark
+            if (localStorage.getItem('bookmarked') === 'true') {
+                bookmarkIcon.classList.remove('far');
+                bookmarkIcon.classList.add('fas');
+            }
+
+            // Read aloud functionality
+            const readAloudBtn = document.getElementById('readAloudBtn');
+            let speechSynthesis = window.speechSynthesis;
+            let isReading = false;
+            let utterance = null;
+            
+            readAloudBtn.addEventListener('click', function() {
+                if (!isReading) {
+                    // Start reading
+                    const content = document.querySelector('.chapter-content').textContent;
+                    utterance = new SpeechSynthesisUtterance(content);
+                    
+                    // Set voice preferences
+                    const voices = speechSynthesis.getVoices();
+                    const preferredVoice = voices.find(voice => 
+                        voice.name.includes('Google UK English Male') || 
+                        voice.name.includes('English (UK)'));
+                    
+                    if (preferredVoice) {
+                        utterance.voice = preferredVoice;
+                    }
+                    
+                    utterance.rate = 0.9;
+                    utterance.pitch = 1;
+                    
+                    speechSynthesis.speak(utterance);
+                    isReading = true;
+                    readAloudBtn.innerHTML = '<i class="fas fa-pause"></i> Pause';
+                    
+                    utterance.onend = function() {
+                        isReading = false;
+                        readAloudBtn.innerHTML = '<i class="fas fa-volume-up"></i> Read Aloud';
+                    };
+                } else {
+                    // Pause or resume
+                    if (speechSynthesis.paused) {
+                        speechSynthesis.resume();
+                        readAloudBtn.innerHTML = '<i class="fas fa-pause"></i> Pause';
+                    } else {
+                        speechSynthesis.pause();
+                        readAloudBtn.innerHTML = '<i class="fas fa-play"></i> Resume';
+                    }
+                }
+            });
+            
+            // Ensure voices are loaded
+            speechSynthesis.onvoiceschanged = function() {
+                // Voices are now loaded
+            };
+
+            // Fullscreen functionality
+            const fullscreenBtn = document.getElementById('fullscreenBtn');
+            
+            fullscreenBtn.addEventListener('click', function() {
+                if (!document.fullscreenElement) {
+                    document.documentElement.requestFullscreen().catch(err => {
+                        console.error(`Error attempting to enable fullscreen: ${err.message}`);
+                    });
+                    fullscreenBtn.innerHTML = '<i class="fas fa-compress"></i>';
+                } else {
+                    if (document.exitFullscreen) {
+                        document.exitFullscreen();
+                        fullscreenBtn.innerHTML = '<i class="fas fa-expand"></i>';
+                    }
+                }
+            });
+            
+            // Page turn animation for chapter navigation
+            const nextChapterLinks = document.querySelectorAll('#nextChapter, #nextChapterBottom');
+            const prevChapterLinks = document.querySelectorAll('#prevChapter, #prevChapterBottom');
+            const pageTurn = document.getElementById('pageTurn');
+            
+            function navigateWithAnimation(e, isNext) {
+                e.preventDefault();
+                pageTurn.classList.add('active');
+                
+                setTimeout(() => {
+                    // In a real app, this would load the next chapter
+                    // For demo, we'll just reload the current page
+                    window.location.href = isNext ? '#' : '#';
+                }, 600);
+            }
+            
+            nextChapterLinks.forEach(link => {
+                link.addEventListener('click', (e) => navigateWithAnimation(e, true));
+            });
+            
+            prevChapterLinks.forEach(link => {
+                link.addEventListener('click', (e) => navigateWithAnimation(e, false));
+            });
+
+            // Interactive elements in the text
+            const interactiveWords = document.querySelectorAll('.chapter-content p');
+            
+            interactiveWords.forEach(paragraph => {
+                // Split text into words and wrap each in a span
+                const words = paragraph.textContent.split(' ');
+                paragraph.innerHTML = '';
+                
+                words.forEach((word, index) => {
+                    const wordSpan = document.createElement('span');
+                    wordSpan.textContent = word + (index < words.length - 1 ? ' ' : '');
+                    
+                    // Add hover effect for definition lookup (simulated)
+                    wordSpan.style.transition = 'all 0.3s';
+                    wordSpan.addEventListener('mouseenter', function() {
+                        this.style.color = 'var(--gold)';
+                        this.style.cursor = 'pointer';
+                    });
+                    
+                    wordSpan.addEventListener('mouseleave', function() {
+                        this.style.color = '';
+                    });
+                    
+                    wordSpan.addEventListener('click', function() {
+                        // In a real app, this would show a definition or annotation
+                        const tooltip = document.createElement('div');
+                        tooltip.textContent = 'Definition: ' + this.textContent.trim().toLowerCase();
+                        tooltip.style.position = 'fixed';
+                        tooltip.style.backgroundColor = 'var(--secondary)';
+                        tooltip.style.color = 'var(--text)';
+                        tooltip.style.padding = '5px 10px';
+                        tooltip.style.borderRadius = '5px';
+                        tooltip.style.boxShadow = '0 3px 10px rgba(0,0,0,0.2)';
+                        tooltip.style.zIndex = '1000';
+                        tooltip.style.top = (this.getBoundingClientRect().top - 40) + 'px';
+                        tooltip.style.left = this.getBoundingClientRect().left + 'px';
+                        tooltip.style.maxWidth = '200px';
+                        document.body.appendChild(tooltip);
+                        
+                        setTimeout(() => {
+                            tooltip.style.opacity = '0';
+                            setTimeout(() => {
+                                tooltip.remove();
+                            }, 500);
+                        }, 2000);
+                    });
+                    
+                    paragraph.appendChild(wordSpan);
+                });
+            });
+                
+        });
+    // Add this to your JavaScript
+// Language switcher functionality
+const languageBtn = document.getElementById('languageBtn');
+const languageDropdown = document.getElementById('languageDropdown');
+
+languageBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    languageDropdown.classList.toggle('active');
+});
+
+document.addEventListener('click', function() {
+    languageDropdown.classList.remove('active');
+});
+
+// Prevent dropdown from closing when clicking inside it
+languageDropdown.addEventListener('click', function(e) {
+    e.stopPropagation();
+});
+
+// Language selection handler
+const languageLinks = document.querySelectorAll('.language-dropdown a');
+languageLinks.forEach(link => {
+    link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const lang = this.getAttribute('data-lang');
+        changeLanguage(lang);
+        languageBtn.querySelector('span').textContent = lang.toUpperCase();
+        languageDropdown.classList.remove('active');
+    });
+});
+
+function changeLanguage(lang) {
+    // In a real app, this would load translations
+    // For demo, we'll just show a notification
+    const languages = {
+        en: 'English',
+        es: 'Spanish',
+        fr: 'French',
+        de: 'German',
+        ja: 'Japanese'
+    };
+    
+    const notification = document.createElement('div');
+    notification.textContent = `Language changed to ${languages[lang]}`;
+    notification.style.position = 'fixed';
+    notification.style.bottom = '100px';
+    notification.style.right = '20px';
+    notification.style.backgroundColor = 'var(--secondary)';
+    notification.style.color = 'var(--text)';
+    notification.style.padding = '10px 20px';
+    notification.style.borderRadius = '5px';
+    notification.style.boxShadow = '0 3px 10px rgba(0,0,0,0.2)';
+    notification.style.zIndex = '1000';
+    notification.style.transition = 'opacity 0.5s';
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.style.opacity = '0';
+        setTimeout(() => {
+            notification.remove();
+        }, 500);
+    }, 2000);
+    
+    // Save language preference
+    localStorage.setItem('language', lang);
+}
+
+// Check for saved language preference
+if (localStorage.getItem('language')) {
+    const lang = localStorage.getItem('language');
+    languageBtn.querySelector('span').textContent = lang.toUpperCase();
+}
+    
+
+    </script>
+</body>
+</html>
